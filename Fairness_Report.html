@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>EquiLend AI Fairness Report</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 32px;
+      color: #111827;
+      background: #f9fafb;
+      line-height: 1.5;
+    }
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    }
+    h1, h2 {
+      margin-top: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+    }
+    th, td {
+      border: 1px solid #e5e7eb;
+      padding: 10px;
+      text-align: left;
+      font-size: 14px;
+    }
+    th {
+      background: #f3f4f6;
+    }
+    .metrics {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(120px, 1fr));
+      gap: 16px;
+    }
+    .metric {
+      background: #f3f4f6;
+      border-radius: 12px;
+      padding: 16px;
+    }
+    .metric-label {
+      font-size: 12px;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .metric-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .small {
+      color: #4b5563;
+      font-size: 14px;
+    }
+    img {
+      width: 100%;
+      max-width: 1100px;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      background: white;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>EquiLend AI Fairness Report</h1>
+    <p class="small">Auditor-ready compliance summary for the deployed credit-risk model.</p>
+    <p><strong>Overall Compliance:</strong> <span style='display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;color:#166534;background:#dcfce7;'>PASS</span></p>
+    <p><strong>Disparate Impact Ratio:</strong> 0.941</p>
+    <p><strong>Decision Threshold:</strong> 0.606</p>
+    <p><strong>Model:</strong> XGBClassifier</p>
+    <p><strong>Dataset Size:</strong> 2000</p>
+    <p><strong>Generated:</strong> 2026-04-09T09:29:11.082892+00:00</p>
+  </div>
+
+  <div class="card">
+    <h2>Overall Model Metrics</h2>
+    <div class="metrics">
+      <div class="metric"><div class="metric-label">ROC-AUC</div><div class="metric-value">0.8494</div></div>
+      <div class="metric"><div class="metric-label">Accuracy</div><div class="metric-value">0.8715</div></div>
+      <div class="metric"><div class="metric-label">Precision</div><div class="metric-value">0.6928</div></div>
+      <div class="metric"><div class="metric-label">Recall</div><div class="metric-value">0.7449</div></div>
+      <div class="metric"><div class="metric-label">F1 Score</div><div class="metric-value">0.7179</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Fairness by Protected Group</h2>
+    <p class="small">
+      Approval means the model predicted <strong>non-default</strong>. The 80% rule is used as the primary fairness audit threshold.
+    </p>
+    <table>
+      <thead>
+        <tr>
+          <th>Group</th>
+          <th>Sample Size</th>
+          <th>Approval Rate</th>
+          <th>Default Rate</th>
+          <th>Accuracy</th>
+          <th>Precision</th>
+          <th>Recall</th>
+          <th>F1</th>
+          <th>DIR</th>
+          <th>Compliance</th>
+        </tr>
+      </thead>
+      <tbody><tr><td>Female</td><td>660</td><td>0.733</td><td>0.229</td><td>0.865</td><td>0.676</td><td>0.788</td><td>0.728</td><td>0.941</td><td><span style='display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;color:#166534;background:#dcfce7;'>PASS</span></td></tr><tr><td>Male</td><td>683</td><td>0.779</td><td>0.217</td><td>0.864</td><td>0.682</td><td>0.696</td><td>0.689</td><td>1.000</td><td><span style='display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;color:#166534;background:#dcfce7;'>PASS</span></td></tr><tr><td>Non-Binary</td><td>657</td><td>0.779</td><td>0.213</td><td>0.886</td><td>0.724</td><td>0.750</td><td>0.737</td><td>1.000</td><td><span style='display:inline-block;padding:6px 12px;border-radius:999px;font-weight:700;color:#166534;background:#dcfce7;'>PASS</span></td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Disparate Impact Interpretation</h2>
+    <p>
+      The Disparate Impact Ratio (DIR) is calculated as
+      <code>min(group approval rate) / max(group approval rate)</code>.
+    </p>
+    <ul>
+      <li><strong>PASS</strong>: DIR ≥ 0.80</li>
+      <li><strong>WARN</strong>: 0.70 ≤ DIR &lt; 0.80</li>
+      <li><strong>FAIL</strong>: DIR &lt; 0.70</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h2>SHAP Explainability Summary</h2>
+    <p class="small">Embedded as a base64 SVG so the report is fully self-contained.</p>
+    <img alt="SHAP summary plot" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTAwIiBoZWlnaHQ9IjQyMCIgdmlld0JveD0iMCAwIDExMDAgNDIwIj4KICAgIDxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IndoaXRlIi8+CiAgICA8dGV4dCB4PSI1NTAuMCIgeT0iMzIiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZvbnQtc2l6ZT0iMjQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmaWxsPSIjMTExODI3Ij4KICAgICAgU0hBUCBGZWF0dXJlIEltcG9ydGFuY2UgU3VtbWFyeQogICAgPC90ZXh0PgogICAgPHRleHQgeD0iMzYwIiB5PSI0MDgiIGZvbnQtc2l6ZT0iMTIiIGZpbGw9IiM0YjU1NjMiPk1lYW4gfFNIQVAgdmFsdWV8PC90ZXh0PgogICAgCiAgICAgICAgICAgIDx0ZXh0IHg9IjM1MCIgeT0iODAiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxZjI5MzciPm51bV9fcmVwYXltZW50X2hpc3RvcnlfcGN0PC90ZXh0PgogICAgICAgICAgICA8cmVjdCB4PSIzNjAiIHk9IjY2IiB3aWR0aD0iNjgwLjAwIiBoZWlnaHQ9IjE4IiByeD0iNCIgZmlsbD0iIzJFN0QzMiIgLz4KICAgICAgICAgICAgPHRleHQgeD0iMTA0OC4wMCIgeT0iODAiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxZjI5MzciPjEuNTUyMjwvdGV4dD4KICAgICAgICAgICAgCiAgICAgICAgICAgIDx0ZXh0IHg9IjM1MCIgeT0iMTEyIiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMWYyOTM3Ij5udW1fX21vbnRobHlfaW5jb21lPC90ZXh0PgogICAgICAgICAgICA8cmVjdCB4PSIzNjAiIHk9Ijk4IiB3aWR0aD0iMTY2LjQ2IiBoZWlnaHQ9IjE4IiByeD0iNCIgZmlsbD0iIzJFN0QzMiIgLz4KICAgICAgICAgICAgPHRleHQgeD0iNTM0LjQ2IiB5PSIxMTIiIGZvbnQtc2l6ZT0iMTMiIGZpbGw9IiMxZjI5MzciPjAuMzgwMDwvdGV4dD4KICAgICAgICAgICAgCiAgICAgICAgICAgIDx0ZXh0IHg9IjM1MCIgeT0iMTQ0IiB0ZXh0LWFuY2hvcj0iZW5kIiBmb250LXNpemU9IjE0IiBmaWxsPSIjMWYyOTM3Ij5udW1fX3V0aWxpdHlfYmlsbF9hdmVyYWdlPC90ZXh0PgogICAgICAgICAgICA8cmVjdCB4PSIzNjAiIHk9IjEzMCIgd2lkdGg9IjE2Mi43NyIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjUzMC43NyIgeT0iMTQ0IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjM3MTU8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjE3NiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19lbXBsb3ltZW50X2xlbmd0aF84KyB5ZWFyczwvdGV4dD4KICAgICAgICAgICAgPHJlY3QgeD0iMzYwIiB5PSIxNjIiIHdpZHRoPSIyMS41NCIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM4OS41NCIgeT0iMTc2IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjA0OTI8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjIwOCIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19lbXBsb3ltZW50X2xlbmd0aF8xLTMgeWVhcnM8L3RleHQ+CiAgICAgICAgICAgIDxyZWN0IHg9IjM2MCIgeT0iMTk0IiB3aWR0aD0iMjAuMDkiIGhlaWdodD0iMTgiIHJ4PSI0IiBmaWxsPSIjMkU3RDMyIiAvPgogICAgICAgICAgICA8dGV4dCB4PSIzODguMDkiIHk9IjIwOCIgZm9udC1zaXplPSIxMyIgZmlsbD0iIzFmMjkzNyI+MC4wNDU5PC90ZXh0PgogICAgICAgICAgICAKICAgICAgICAgICAgPHRleHQgeD0iMzUwIiB5PSIyNDAiIHRleHQtYW5jaG9yPSJlbmQiIGZvbnQtc2l6ZT0iMTQiIGZpbGw9IiMxZjI5MzciPmNhdF9fZ2VuZGVyX0ZlbWFsZTwvdGV4dD4KICAgICAgICAgICAgPHJlY3QgeD0iMzYwIiB5PSIyMjYiIHdpZHRoPSIxNy40MCIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM4NS40MCIgeT0iMjQwIiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjAzOTc8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjI3MiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19lbXBsb3ltZW50X2xlbmd0aF8mbHQ7IDEgeWVhcjwvdGV4dD4KICAgICAgICAgICAgPHJlY3QgeD0iMzYwIiB5PSIyNTgiIHdpZHRoPSIxNS45OSIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM4My45OSIgeT0iMjcyIiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjAzNjU8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjMwNCIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19nZW5kZXJfTWFsZTwvdGV4dD4KICAgICAgICAgICAgPHJlY3QgeD0iMzYwIiB5PSIyOTAiIHdpZHRoPSIxNS43NSIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM4My43NSIgeT0iMzA0IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjAzNTk8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjMzNiIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19nZW5kZXJfTm9uLUJpbmFyeTwvdGV4dD4KICAgICAgICAgICAgPHJlY3QgeD0iMzYwIiB5PSIzMjIiIHdpZHRoPSIxMy40MCIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM4MS40MCIgeT0iMzM2IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjAzMDY8L3RleHQ+CiAgICAgICAgICAgIAogICAgICAgICAgICA8dGV4dCB4PSIzNTAiIHk9IjM2OCIgdGV4dC1hbmNob3I9ImVuZCIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzFmMjkzNyI+Y2F0X19lbXBsb3ltZW50X2xlbmd0aF80LTcgeWVhcnM8L3RleHQ+CiAgICAgICAgICAgIDxyZWN0IHg9IjM2MCIgeT0iMzU0IiB3aWR0aD0iOC44NiIgaGVpZ2h0PSIxOCIgcng9IjQiIGZpbGw9IiMyRTdEMzIiIC8+CiAgICAgICAgICAgIDx0ZXh0IHg9IjM3Ni44NiIgeT0iMzY4IiBmb250LXNpemU9IjEzIiBmaWxsPSIjMWYyOTM3Ij4wLjAyMDI8L3RleHQ+CiAgICAgICAgICAgIAogICAgPC9zdmc+CiAgICA=" />
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Mean |SHAP|</th></tr>
+      </thead>
+      <tbody><tr><td>num__repayment_history_pct</td><td>1.552172</td></tr><tr><td>num__monthly_income</td><td>0.379955</td></tr><tr><td>num__utility_bill_average</td><td>0.371533</td></tr><tr><td>cat__employment_length_8+ years</td><td>0.049171</td></tr><tr><td>cat__employment_length_1-3 years</td><td>0.045864</td></tr><tr><td>cat__gender_Female</td><td>0.039709</td></tr><tr><td>cat__employment_length_&lt; 1 year</td><td>0.036491</td></tr><tr><td>cat__gender_Male</td><td>0.035946</td></tr><tr><td>cat__gender_Non-Binary</td><td>0.030580</td></tr><tr><td>cat__employment_length_4-7 years</td><td>0.020214</td></tr></tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <h2>Audit Metadata</h2>
+    <pre>{
+  &quot;protected_attribute&quot;: &quot;gender&quot;,
+  &quot;threshold_objective&quot;: &quot;max_f1_subject_to_precision_recall_approval_constraints&quot;,
+  &quot;source_artifacts_dir&quot;: &quot;C:\\Users\\Aayushi Patel\\Documents\\siya\\EquilendAI\\models&quot;,
+  &quot;source_dataset&quot;: &quot;C:\\Users\\Aayushi Patel\\Documents\\siya\\EquilendAI\\data\\equilend_mock_data.csv&quot;,
+  &quot;generated_at_utc&quot;: &quot;2026-04-09T09:29:11.082892+00:00&quot;,
+  &quot;model_name&quot;: &quot;XGBClassifier&quot;,
+  &quot;dataset_size&quot;: 2000,
+  &quot;threshold&quot;: 0.6064093112945557
+}</pre>
+  </div>
+</body>
+</html>
